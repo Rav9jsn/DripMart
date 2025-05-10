@@ -33,7 +33,7 @@ const Cart = () => {
     const totalamt = num.reduce((n, a) => {
       return n + a;
     }, 0);
-    return totalamt;
+    return parseFloat(totalamt).toFixed(2);
   };
   return (
     <div>

@@ -1,16 +1,53 @@
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import logo from "../assets/logo.svg";
+import cart from "../assets/cart.png";
+import { Link } from "react-router-dom";
+import { prodAmount } from "../state/storage";
+import { updateItemInArray } from "../state/storage";
 
 const ProductDetail = () => {
+  const totalAmount = useSelector((state) => state.image.productAmounts);
+  const dataHai = useSelector((state) => state.image.clickedImages);
+  const dispatch = useDispatch();
   const data = useLocation().state;
+  const productDataColtcn = (dataAtCart) => {
+    dispatch(prodAmount(dataAtCart.price));
+    const [yo] = dataHai.filter((item) => item.id === dataAtCart.id);
+    if (yo) {
+      let u = JSON.parse(JSON.stringify(yo));
+      u.itemCount = (u.itemCount || 0) + 1;
+      dispatch(updateItemInArray(u));
+    }
+  };
   console.log(data);
 
   return (
-    <div>
-      <div className="text-3xl text-center my-5 animate-pulse  font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
-        Drip
-        <p className="bg-gradient-to-r  from-gray-400 to-gray-700 bg-clip-text text-transparent  inline-block italic text-[33px]">
-          Mart
-        </p>
+    <>
+      <div className="bg-cover bg-center  pt-[10px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
+        <div className="flex justify-between items-center">
+          {/* for left logo */}
+
+          <img className="w-[4%] cursor-pointer" src={logo} alt="" />
+
+          {/* for center */}
+          <div className="text-3xl font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
+            Drip
+            <p className="bg-gradient-to-r  from-gray-400 to-gray-700 bg-clip-text text-transparent  inline-block italic text-[33px]">
+              Mart
+            </p>
+          </div>
+          {/* for right cart */}
+          <Link to={"/Cart"}>
+            <div className="relative mx-1.5">
+              {" "}
+              <img className=" cursor-pointer" src={cart} alt="" />
+              <p className=" text-white -top-1 right-0.5 bg-red-500 rounded-full absolute px-1 text-[12px] font-[700]">
+                {totalAmount.length}
+              </p>
+            </div>
+          </Link>
+        </div>
       </div>
       <div className="flex gap-[250px]  justify-around">
         <img
@@ -29,7 +66,10 @@ const ProductDetail = () => {
             <p className="capitalize">Category:- {data.category}</p>
           </div>
           <div className="text-[1.5rem] font-semibold">{data.price} $</div>
-          <button className="font-bold bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]">
+          <button
+            onClick={() => productDataColtcn(data)}
+            className="font-bold bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
+          >
             {" "}
             Add To Cart
           </button>
@@ -43,7 +83,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>{" "}
-    </div>
+    </>
   );
 };
 
