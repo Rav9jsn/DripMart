@@ -16,7 +16,7 @@ const Autoslide = () => {
   }, []);
   return (
     <div>
-      <div className="relative w-full h-84 overflow-hidden rounded-xl">
+      <div className="relative w-full  overflow-hidden rounded-xl">
         <div
           className="flex transition-transform duration-800 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -26,7 +26,7 @@ const Autoslide = () => {
               key={i}
               src={src}
               alt={`slide-${i}`}
-              className="w-full flex-shrink-0 object-cover h-100"
+              className="w-full flex-shrink-0 object-contain "
             />
           ))}
         </div>

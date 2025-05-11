@@ -9,7 +9,7 @@ import NotFound from "./Components/NotFound";
 const App = () => {
   return (
     <Router>
-      <div className="relative bg-gradient-to-r from-indigo-100 to-indigo-50 px-[4vw]  flex flex-col gap-10">
+      <div className="relative bg-gradient-to-r from-indigo-100 via-indigo-100 to-indigo-50 mb:px-[4vw] px-[0.5vw]  flex flex-col lg:gap-10 gap-4">
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />

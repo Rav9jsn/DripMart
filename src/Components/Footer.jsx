@@ -8,10 +8,10 @@ import { IoCall } from "react-icons/io5";
 const Footer = () => {
   return (
     <div className="  px-[4vw]">
-      <div className="flex  py-[50px] justify-between">
+      <div className="flex  flex-col mb:flex-row gap-3 py-[50px] justify-between">
         <div className="flex gap-3   flex-col">
           {/* <img className="w-[20rem]" src={fotterlogo} alt="" /> */}
-          <p className="text-[1.1rem] italic border-b-2 border-[#00000081] text-black">
+          <p className="text-[1.1rem] italic mb:border-b-2 border-[#00000081] text-black">
             {" "}
             "Fashion is the armor to survive the reality of everyday life." —
             Bill Cunningham
@@ -52,25 +52,25 @@ const Footer = () => {
             <p className="font-bold text-[1.1rem] text-black">Quick Links</p>
             <p className="text-black text-[16px] ">Home</p>
             <p className="text-black text-[16px] ">About Us</p>
-            <p className="text-black text-[16px] ">Courses</p>
+            <p className="text-black text-[16px] ">Fashion</p>
             <p className="text-black text-[16px] ">FAQ</p>
             <p className="text-black text-[16px] ">Contact</p>
           </div>
           {/* 3rd col */}
           <div className="flex gap-[0.6rem] flex-col">
             <p className="font-bold text-[1.1rem] text-black">
-              Courses Category
+              Fashion Category
             </p>
-            <p className="text-black text-[16px] ">Business Management</p>
-            <p className="text-black text-[16px] ">Programming</p>
-            <p className="text-black text-[16px] ">Creative Arts</p>
-            <p className="text-black text-[16px] ">Digital Strategy</p>
-            <p className="text-black text-[16px] ">Contact</p>
+            <p className="text-black text-[16px] ">Products Management</p>
+            <p className="text-black text-[16px] ">Footwear</p>
+            <p className="text-black text-[16px] ">Clothing</p>
+            <p className="text-black text-[16px] ">Dresses & Jumpsuits</p>
+            <p className="text-black text-[16px] ">Accessories</p>
           </div>
         </div>
         {/* right */}
         <div className="flex items-center  gap-[1.5rem] lg:w-[35%] md:w-[45%] flex-col">
-          <p className="text-4xl mt-5 md:mt-0 md:px-0   sm:px-20 text-center md:text-left font-medium text-black">
+          <p className="text-3xl mt-5 md:mt-0 md:px-0   sm:px-20 text-center md:text-left font-medium text-black">
             Join our newsletter to keep up to date with us!
           </p>
           <div className="flex p-[0.5vw]  rounded-4xl justify-between bg-white">

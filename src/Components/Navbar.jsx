@@ -13,14 +13,14 @@ const Navbar = () => {
     <div className="bg-cover bg-center bg-gradient-to-r from-indigo-100 to-indigo-50 py-[25px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
       <div className="flex justify-between items-center">
         {/* for left logo */}
-        <Link className="w-[4%] cursor-pointer" to={"/"}>
+        <Link className="w-[31px] sm:w-[45px] cursor-pointer" to={"/"}>
           <img src={logo} alt="" />
         </Link>
 
         {/* for center */}
-        <div className="text-3xl font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
+        <div className="sm:text-3xl  text-2xl font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
           Drip
-          <p className="bg-gradient-to-r  from-gray-400 to-gray-700 bg-clip-text text-transparent  inline-block italic text-[33px]">
+          <p className="bg-gradient-to-r  from-gray-400 to-gray-700 bg-clip-text text-transparent  inline-block italic sm:text-[33px]">
             Mart
           </p>
         </div>

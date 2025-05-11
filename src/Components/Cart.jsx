@@ -56,12 +56,12 @@ const Cart = () => {
     <div className="relative">
       <Navbar />
       {!cart && !order ? (
-        <div className="h-[50vh] flex  flex-col gap-10 justify-center items-center text-4xl">
+        <div className="h-[50vh] flex  flex-col gap-10 justify-center items-center st:text-3xl text-2xl">
           Oops! Nothing here yet...
-          <div className="bg-[#4e738e23] px-4 py-3 rounded-lg">
+          <div className="bg-[#4e738e23] px-4 st:py-3 py-1 rounded-lg">
             <Link
               to={"/"}
-              className=" text-4xl font-bold text-[#f8faff] hover:text-[#4e738e60]"
+              className=" st:text-3xl text-2xl font-bold text-[#f8faff] hover:text-[#4e738e60]"
             >
               Go To Home
             </Link>
@@ -72,18 +72,20 @@ const Cart = () => {
           <>
             {" "}
             <div className=" flex justify-center  items-center my-[10vh]">
-              <div className="flex gap-8  flex-col">
-                <p className="text-2xl font-semibold">Your Cart</p>
+              <div className="flex gap-8 px-[2vw] flex-col">
+                <p className="text-2xl sm:text-left text-center font-semibold">
+                  Your Cart
+                </p>
                 {data.map((item, i) => {
                   return item.itemCount ? (
                     <div key={i} className="flex gap-10">
                       <img
-                        className="w-[10vw] object-contain"
+                        className="md:w-[10vw] mix-blend-darken w-[9rem] object-contain"
                         src={item.image}
                         alt=""
                       />
 
-                      <div className="text-[1.2rem] flex flex-col gap-5 font-semibold">
+                      <div className="st:text-[1.2rem] flex flex-col gap-5 font-semibold">
                         <p>{item.title}</p>
                         <p>Price: {item.price} $</p>
                         <div className="flex text-2xl gap-5 items-center ">
@@ -108,13 +110,13 @@ const Cart = () => {
                 })}
               </div>
             </div>
-            <div className=" flex justify-center flex-col items-center gap-5 text-[1.2rem] font-semibold mr-24">
+            <div className=" flex justify-center flex-col items-center gap-5 text-[1.2rem] font-semibold ">
               {" "}
               Total : $
               {(Math.round((result + Number.EPSILON) * 100) / 100).toFixed(2)}
               <div
                 onClick={buy}
-                className=" cursor-pointer w-[15vw] text-center rounded-2xl px-5 py-2.5 bg-[#4e738e23]"
+                className=" cursor-pointer lg:w-[15vw] text-center rounded-2xl px-5 py-2.5 bg-[#4e738e23]"
               >
                 Proceed to Buy
               </div>
@@ -125,20 +127,22 @@ const Cart = () => {
       {order && (
         <div
           onClick={buy}
-          className="flex gap-5  flex-col justify-center items-center"
+          className="flex st:gap-5 px-[2vw] gap-2 flex-col justify-center items-center"
         >
           <img
-            className="w-[28vw] object-contain rounded-[20%] "
+            className="st:w-[25rem] mix-blend-darken w-[20rem] object-contain rounded-[20%] "
             src={confirm_image}
             alt=""
           />
-          <p className="font-semibold text-2xl">Order Placed Sucessfully!!</p>
-          <p className=" text-[1.1rem] tracking-wider">
+          <p className="font-semibold text-center text-2xl">
+            Order Placed Sucessfully!!
+          </p>
+          <p className=" text-[1.1rem] text-center tracking-wider">
             We have sent you and order confirmation email.
           </p>
           <Link
             to={"/"}
-            className=" text-4xl font-bold bg-white px-4 py-2 rounded-2xl text-[#4e738e]"
+            className=" mb:text-4xl text-2xl font-semibold bg-white px-4 py-2 rounded-2xl text-[#4e738e]"
           >
             Go To Home
           </Link>

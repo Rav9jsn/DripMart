@@ -25,7 +25,6 @@ const ProductDetail = () => {
       dispatch(addImage(data));
     }
   };
-  console.log(data);
 
   return (
     <>
@@ -55,21 +54,21 @@ const ProductDetail = () => {
           </Link>
         </div>
       </div>
-      <div className="flex gap-[250px]  justify-around">
+      <div className="flex  md:flex-row flex-col items-center lg:gap-[250px] md:gap-[50px] gap-[10px]  justify-around">
         <img
-          className="w-[32%] object-contain	 hover:shadow hover:shadow-black rounded-4xl"
+          className="w-[23rem] mix-blend-darken object-contain	 hover:shadow hover:shadow-black rounded-4xl"
           src={data?.image}
           alt=""
         />
-        <div className="flex flex-col  items-center text-center gap-[40px] my-[50px]">
-          <div className="text-[1.7rem] w-[60%]  font-semibold">
+        <div className="flex flex-col  items-center text-center md:gap-[40px] gap-[10px] md:pt-[150px] lg:my-[50px]">
+          <div className="text-[1.7rem] lg:w-[60%]  font-semibold">
             {data.title}
           </div>
 
-          <div className="text-[1rem] text-left font-semibold">
-            <p className="mb-4">About this item:-</p>
+          <div className="text-[1rem] px-[4vw]  text-left font-semibold">
+            <p className="mb-4 ">About this item:-</p>
             {data.description}
-            <p className="capitalize">Category:- {data.category}</p>
+            <p className="capitalize mt-4">Category:- {data.category}</p>
           </div>
           <div className="text-[1.5rem] font-semibold">{data.price} $</div>
           <button
@@ -94,33 +93,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-
-// category
-// :
-// "women's clothing"
-// description
-// :
-// "Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look."
-// id
-// :
-// 17
-// image
-// :
-// "https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2.jpg"
-// price
-// :
-// 39.99
-// rating
-// :
-// count
-// :
-// 679
-// rate
-// :
-// 3.8
-// [[Prototype]]
-// :
-// Object
-// title
-// :
-// "Rain Jacket Women Windbreaker Striped Climbing Raincoats"
