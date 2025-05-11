@@ -8,9 +8,11 @@ import { updateItemInArray } from "../state/storage";
 
 const Body = () => {
   const dispatch = useDispatch();
+  const [iconTimer, setIconTimer] = useState(false);
   const clickedImages = useSelector((state) => state.image.clickedImages);
-  const [data, setdata] = useState(null);
   const navigate = useNavigate();
+  const [data, setdata] = useState(null);
+
   useEffect(() => {
     const check = async () => {
       try {
@@ -23,6 +25,10 @@ const Body = () => {
     };
     check();
   }, []);
+  const addedIcon = () => {
+    setIconTimer(true);
+    setTimeout(() => setIconTimer(false), 600);
+  };
   const productDataColtcn = (data) => {
     let itemCount = "itemCount";
     dispatch(prodAmount(data.price));
@@ -44,14 +50,14 @@ const Body = () => {
         {data &&
           data.map((data, i) => {
             return (
-              <div className="flex flex-col gap-2 items-center" key={data.id}>
+              <div className="flex flex-col  gap-2 items-center" key={data.id}>
                 <img
                   onClick={() => {
                     navigate(`/Home/${data.title.slice(1, 20)}`, {
                       state: data,
                     });
                   }}
-                  className="w-[90%] cursor-pointer rounded-2xl object-contain aspect-square "
+                  className="w-[90%] hover:shadow hover:shadow-black cursor-pointer rounded-2xl object-contain aspect-square "
                   src={data?.image}
                   alt=""
                 />
@@ -62,8 +68,10 @@ const Body = () => {
                   {data.price} $
                 </div>
                 <button
-                  onClick={() => productDataColtcn(data)}
-                  className="font-bold bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
+                  onClick={() => {
+                    productDataColtcn(data), addedIcon();
+                  }}
+                  className="font-bold duration-400 bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
                 >
                   {" "}
                   Add To Cart
@@ -71,6 +79,13 @@ const Body = () => {
               </div>
             );
           })}
+      </div>
+      <div>
+        {iconTimer && (
+          <div className=" bg-gradient-to-r font-bold animate-bounce text-[#8D0B41] from-violet-200 to-pink-200 fixed z-10 top-25 left-[45vw] bg-amber-400 px-5 py-3 rounded-full">
+            🎉 Item added successfully!
+          </div>
+        )}
       </div>
     </>
   );

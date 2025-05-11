@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../assets/logo.svg";
 import cart from "../assets/cart.png";
+import { addImage } from "../state/storage";
 import { Link } from "react-router-dom";
 import { prodAmount } from "../state/storage";
 import { updateItemInArray } from "../state/storage";
@@ -13,22 +14,27 @@ const ProductDetail = () => {
   const data = useLocation().state;
   const productDataColtcn = (dataAtCart) => {
     dispatch(prodAmount(dataAtCart.price));
+    let itemCount = "itemCount";
     const [yo] = dataHai.filter((item) => item.id === dataAtCart.id);
     if (yo) {
       let u = JSON.parse(JSON.stringify(yo));
       u.itemCount = (u.itemCount || 0) + 1;
       dispatch(updateItemInArray(u));
+    } else {
+      data[itemCount] = 1;
+      dispatch(addImage(data));
     }
   };
   console.log(data);
 
   return (
     <>
-      <div className="bg-cover bg-center  pt-[10px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
+      <div className="bg-cover bg-center bg-gradient-to-r from-indigo-100 to-indigo-50 pt-[10px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
         <div className="flex justify-between items-center">
           {/* for left logo */}
-
-          <img className="w-[4%] cursor-pointer" src={logo} alt="" />
+          <Link className="w-[4%] cursor-pointer" to={"/"}>
+            <img src={logo} alt="" />
+          </Link>
 
           {/* for center */}
           <div className="text-3xl font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
@@ -51,7 +57,7 @@ const ProductDetail = () => {
       </div>
       <div className="flex gap-[250px]  justify-around">
         <img
-          className="w-[32%] object-contain	  rounded-4xl"
+          className="w-[32%] object-contain	 hover:shadow hover:shadow-black rounded-4xl"
           src={data?.image}
           alt=""
         />
@@ -78,7 +84,7 @@ const ProductDetail = () => {
               Units Sold - {data.rating?.count}
             </p>
             <p className="text-[1.1rem] font-semibold">
-              Rated {data.rating?.rate}/5 by {data.rating?.count}+ Users
+              Rated {data.rating?.rate} / 5 by {data.rating?.count}+ Users
             </p>
           </div>
         </div>

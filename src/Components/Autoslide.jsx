@@ -18,7 +18,7 @@ const Autoslide = () => {
     <div>
       <div className="relative w-full h-84 overflow-hidden rounded-xl">
         <div
-          className="flex transition-transform duration-700 ease-in-out"
+          className="flex transition-transform duration-800 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {imgArray.map((src, i) => (

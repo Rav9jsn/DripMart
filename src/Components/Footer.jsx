@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="flex  py-[50px] justify-between">
         <div className="flex gap-3   flex-col">
           {/* <img className="w-[20rem]" src={fotterlogo} alt="" /> */}
-          <p className="text-[1.1rem] text-black">
+          <p className="text-[1.1rem] italic border-b-2 border-[#00000081] text-black">
             {" "}
             "Fashion is the armor to survive the reality of everyday life." —
             Bill Cunningham
