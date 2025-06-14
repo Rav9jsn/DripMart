@@ -1,12 +1,24 @@
-# React + Vite
+# DripMart
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DripMart is a fully functional online marketplace that was developed in a single day. It provides product detail views, customer reviews, an add-to-cart functionality, dynamic cart updates, and a dark mode switch. The website is responsive on all platforms and is designed to offer a seamless and modern user experience with clean component-based architecture and optimized state management.
 
-Currently, two official plugins are available:
+# Features
+- Product Detail Views**: Explore individual products with detailed information.
+- Customer Reviews**: View reviews from other customers to help with purchase decisions.
+- Add-to-Cart Functionality**: Easily add items to your shopping cart.
+- Dynamic Cart Updates**: Instantly update cart items as you add or remove products.
+- Dark Mode Switch**: Toggle between light and dark modes.
+- Responsive Design**: Fully responsive across all devices for an optimal shopping experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Tech Stack
+- React.js: Frontend framework for dynamic and interactive user interfaces.
+- Redux Toolkit: State management for efficient handling of data flow.
+- JavaScript: The core programming language for dynamic functionality.
+- Tailwind CSS: Utility-first CSS framework for rapid UI development.
 
-## Expanding the ESLint configuration
+# Installation
+To get a local copy of this project up and running, follow these steps:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/yourusername/dripmart.git](https://github.com/Rav9jsn/DripMart.git)
