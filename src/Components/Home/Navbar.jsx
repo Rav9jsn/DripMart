@@ -1,6 +1,6 @@
-import logo from "../assets/logo.svg";
-import cart_logo from "../assets/cart.png";
-import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.svg";
+import cart_logo from "../../assets/cart.png";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
     totalAmount.length - (totalAmtToDec?.length ? totalAmtToDec.length : 0);
 
   return (
-    <div className="bg-cover bg-center bg-gradient-to-r from-indigo-100 to-indigo-50 py-[25px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
+    <div className="bg-cover bg-center bg-gradient-to-r from-indigo-100 to-indigo-50 py-[25px]  sticky top-0 z-50 px-[8px] rounded-b-[10px]">
       <div className="flex justify-between items-center">
         {/* for left logo */}
         <Link className="w-[31px] sm:w-[45px] cursor-pointer" to={"/"}>
@@ -25,15 +25,19 @@ const Navbar = () => {
           </p>
         </div>
         {/* for right cart */}
-        <Link to={"/Cart"}>
-          <div className="relative mx-1.5">
-            {" "}
-            <img className=" cursor-pointer" src={cart_logo} alt="" />
-            <p className=" text-white -top-1 right-0.5 bg-red-500 rounded-full absolute px-1 text-[12px] font-[700]">
-              {cart}
-            </p>
-          </div>
-        </Link>
+        <div className="flex  gap-10">
+          <Link to={'/signup'}>Signup</Link>
+          <Link to={'/login'}> Login</Link>
+          <Link to={"/Cart"}> 
+            <div className="relative mx-1.5">
+              {" "}
+              <img className=" cursor-pointer" src={cart_logo} alt="" />
+              <p className=" text-white -top-1 right-0.5 bg-red-500 rounded-full absolute px-1 text-[12px] font-[700]">
+                {cart}
+              </p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

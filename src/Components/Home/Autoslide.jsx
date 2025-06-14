@@ -1,7 +1,7 @@
-import img1 from "../assets/img1.png";
-import img2 from "../assets/img2.png";
-import img3 from "../assets/img3.png";
-import img4 from "../assets/img4.png";
+import img1 from "../../assets/img1.png";
+import img2 from "../../assets/img2.png";
+import img3 from "../../assets/img3.png";
+import img4 from "../../assets/img4.png";
 import { useState, useEffect } from "react";
 
 const Autoslide = () => {
@@ -13,7 +13,7 @@ const Autoslide = () => {
     }, 1500); // 3 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  });
   return (
     <div>
       <div className="relative w-full  overflow-hidden rounded-xl">

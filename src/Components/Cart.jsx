@@ -1,10 +1,11 @@
-import Navbar from "./Navbar";
+import Navbar from "./Home/Navbar"
 import { useSelector, useDispatch } from "react-redux";
 import { updateItemInArray, minusbtnUpdate } from "../state/storage";
 import { prodAmount, prodAmountforDec, clearAmounts } from "../state/storage";
 import { Link } from "react-router-dom";
 import confirm_image from "../assets/img_confirm.webp";
 import { useState } from "react";
+import Footer from "./Footer";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -148,6 +149,8 @@ const Cart = () => {
           </Link>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 };

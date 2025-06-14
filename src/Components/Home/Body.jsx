@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addImage } from "../state/storage";
-import { prodAmount } from "../state/storage";
+import { addImage } from "../../state/storage";
+import { prodAmount } from "../../state/storage";
 import { useSelector } from "react-redux";
-import { updateItemInArray } from "../state/storage";
+import { updateItemInArray } from "../../state/storage";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const Body = () => {
         <>
           <div className="z-10 grid md:grid-cols-3 mb:grid-cols-2 grid-cols-1  sm:gap-y-5 gap-y-2 ">
             {data &&
-              data.map((data, i) => {
+              data.map((data) => {
                 return (
                   <div
                     className="flex flex-col bg-indigo-100 justify-between items-center"
