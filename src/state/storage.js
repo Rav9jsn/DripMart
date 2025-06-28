@@ -1,55 +1,47 @@
-// src/features/imageSlice.js
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getCartItems } from "../serviced";
 
-const imageSlice = createSlice({
-  name: "image",
+// Async Action to fetch cart items
+export const fetchCartItems = createAsyncThunk("fetchCart", async () => {
+  try {
+    return await getCartItems();
+  } catch (err) {
+    console.error("Error fetching cart items:", err);
+  }
+});
+
+const dripSlice = createSlice({
+  name: "drip",
   initialState: {
-    clickedImages: [],
-    productAmounts: [],
-    minusProductAmounts: [],
+    isLoading: false,
+    data: null,
+    isError: false,
   },
   reducers: {
-    minusbtnUpdate: (state, action) => {
-      const updateData = action.payload;
-      const index = state.clickedImages.findIndex(
-        (item) => item.id === updateData.id
-      );
-      if (index !== -1) {
-        state.clickedImages[index] = updateData;
-      }
+    clearCartData: (state) => {
+      state.data = null;
+      state.isLoading = false;
+      state.isError = false;
     },
-    updateItemInArray: (state, action) => {
-      const updatedItem = action.payload;
-      const index = state.clickedImages.findIndex(
-        (item) => item.id === updatedItem.id
-      );
-      if (index !== -1) {
-        state.clickedImages[index] = updatedItem;
-      }
-    },
-    addImage: (state, action) => {
-      state.clickedImages.push(action.payload);
-    },
-    prodAmount: (state, action) => {
-      state.productAmounts.push(action.payload);
-    },
-    prodAmountforDec: (state, action) => {
-      state.minusProductAmounts.push(action.payload);
-    },
-    clearAmounts: (state) => {
-      state.clickedImages = [];
-      state.productAmounts = [];
-      state.minusProductAmounts = [];
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartItems.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchCartItems.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (JSON.stringify(state.data) !== JSON.stringify(action.payload)) {
+          state.data = action.payload;
+        }
+      })
+      .addCase(fetchCartItems.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+      });
   },
 });
 
-export const {
-  addImage,
-  prodAmount,
-  updateItemInArray,
-  minusbtnUpdate,
-  prodAmountforDec,
-  clearAmounts,
-} = imageSlice.actions;
-export default imageSlice.reducer;
+export const { clearCartData } = dripSlice.actions;
+export default dripSlice.reducer;

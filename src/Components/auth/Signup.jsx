@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createAccount } from "../../serviced";
+import { Link } from "react-router-dom";
 const Signup = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -21,9 +23,15 @@ const Signup = () => {
     }
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    if (user.password === user.confirmPassword) {
+ const submitHandler = async (e) => {
+  e.preventDefault();
+  try {
+    const created = await createAccount(user);
+    const { message, success, errors } = created;
+    console.log(errors);
+    console.log(!errors&&message);
+
+    if (success) {
       setTimeout(() => {
         setUser({
           name: "",
@@ -33,18 +41,19 @@ const Signup = () => {
           role: "",
         });
       }, 500);
-      console.log(user);
-      navigate('/login')
-      
-    } else{
-      alert("confirn Ppassword and password not same")
+      navigate("/login");
     }
-  };
+  } catch (error) {
+    console.error("Signup error:", error);
+   
+  }
+};
+
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-100">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-50">
       <form
         onSubmit={submitHandler}
-        className="flex flex-col gap-4 p-8 bg-white shadow-lg rounded-2xl w-[90%] max-w-md border-4 border-amber-100"
+        className="flex flex-col gap-2 p-8 bg-[#ffffffcb] shadow-lg rounded-2xl w-[90%] max-w-md border-4 border-indigo-300"
       >
         <label className="text-gray-700 font-semibold">Name</label>
         <input
@@ -126,6 +135,15 @@ const Signup = () => {
         >
           Signup
         </button>
+        <span className="block text-center mt-6 text-sm text-gray-700">
+          Already Have Account?{" "}
+          <Link
+            to="/login"
+            className="inline-block text-blue-600 hover:text-white border border-blue-600 px-4 py-1.5 rounded-full hover:bg-blue-600 transition-all duration-300  ml-2 font-medium"
+          >
+            Login
+          </Link>
+        </span>
       </form>
     </div>
   );

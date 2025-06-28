@@ -1,157 +1,249 @@
-import Navbar from "./Home/Navbar"
+import Navbar from "./Home/Navbar";
 import { useSelector, useDispatch } from "react-redux";
-import { updateItemInArray, minusbtnUpdate } from "../state/storage";
-import { prodAmount, prodAmountforDec, clearAmounts } from "../state/storage";
-import { Link } from "react-router-dom";
-import confirm_image from "../assets/img_confirm.webp";
-import { useState } from "react";
 import Footer from "./Footer";
+import { useEffect } from "react";
+import { fetchCartItems } from "../state/storage";
+import { orderCreate } from "../serviced";
+
+import {
+  addToCart,
+  clearCart,
+  decQuantToCart,
+  deletItemFromCart,
+  paymentCheckout,
+} from "../serviced";
+import { MdOutlineClose } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const adressHave = localStorage.getItem("adressHave");
+  const address =
+    adressHave === "true" && JSON.parse(localStorage.getItem("address"));
   const dispatch = useDispatch();
-  const [order, setOrder] = useState(false);
-  const data = useSelector((state) => state.image.clickedImages);
-  const totalAmount = useSelector((state) => state.image.productAmounts);
-  const totalAmtToDec = useSelector((state) => state.image.minusProductAmounts);
-  let cart =
-    totalAmount.length - (totalAmtToDec?.length ? totalAmtToDec.length : 0);
-  const sum = (num) => {
-    const totalamt = num.reduce((n, a) => {
-      return Number(n) + a;
-    }, 0);
-    return Number(totalamt).toFixed(2);
+  const platformfee = 80;
+  const navigate = useNavigate();
+  const cart = useSelector((state) => state.drip.data?.cartProducts);
+  const total = useSelector((state) => state.drip.data?.totalPrice) * 80;
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    dispatch(fetchCartItems());
+  }
+}, []);
+
+
+  const addtocart = async (id) => {
+    await addToCart(id);
+    dispatch(fetchCartItems());
+    deliveryCharge();
   };
-  const result = totalAmtToDec
-    ? sum(totalAmount) - sum(totalAmtToDec)
-    : sum(totalAmount);
-  const productDataColtcn = (dataAtCart) => {
-    dispatch(prodAmount(dataAtCart.price));
-    const [yo] = data.filter((item) => item.id === dataAtCart.id);
-    if (yo) {
-      let u = JSON.parse(JSON.stringify(yo));
-      u.itemCount = (u.itemCount || 0) + 1;
-      dispatch(minusbtnUpdate(u));
+
+  const decQuantity = async (id, num) => {
+    await decQuantToCart(id);
+    dispatch(fetchCartItems());
+    itemoneThenDelte(id, num);
+    deliveryCharge();
+  };
+  const deleItem = async (id) => {
+    await deletItemFromCart(id);
+    dispatch(fetchCartItems());
+    deliveryCharge();
+  };
+
+  const itemoneThenDelte = (id = 0, item) => {
+    if (id && item === 1) {
+      deleItem(id);
     }
   };
 
-  const DecProduct = (dataAtCart) => {
-    dispatch(prodAmountforDec(dataAtCart.price));
-    const [yo] = data.filter((item) => item.id === dataAtCart.id);
-    if (yo) {
-      let u = JSON.parse(JSON.stringify(yo));
-      u.itemCount = (u.itemCount || 0) - 1;
-      dispatch(updateItemInArray(u));
+  const deliveryCharge = () => {
+    let charge = 80;
+    if (total === 500 || total > 500) {
+      charge = 0;
+      return charge;
     }
+    return charge;
+  };
+  const charge = deliveryCharge();
+
+  const DelteAllCart = async () => {
+    await clearCart();
+    dispatch(fetchCartItems());
   };
 
-  const buy = () => {
-    if (cart > 0) {
-      dispatch(clearAmounts());
-      cart = 0;
-      setOrder(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  const onPay = async () => {
+    const totalfull = total && platformfee + total + charge;
+    if (adressHave && adressHave === "true") {
+      if (total) {
+        await paymentCheckout(totalfull);
+        await orderCreate(totalfull);
+      }
+    } else {
+      navigate("/adressform");
     }
   };
-
   return (
-    <div className="relative">
+    <>
       <Navbar />
-      {!cart && !order ? (
-        <div className="h-[50vh] flex  flex-col gap-10 justify-center items-center st:text-3xl text-2xl">
-          Oops! Nothing here yet...
-          <div className="bg-[#4e738e23] px-4 st:py-3 py-1 rounded-lg">
+      <div>
+        {cart ? (
+          <div className="flex gap-14 relative px-10">
+            <div className="flex flex-col justify-center items-center gap-6 ">
+              <div className="font-bold text-3xl"> Your Cart Items</div>
+              <div
+                onClick={() => DelteAllCart()}
+                className="cursor-pointer font-bold w-[17%] ml-[31vw] py-1 text-center backdrop-blur-2xl shadow-md shadow-gray-400 px-5"
+              >
+                Clear All
+              </div>
+
+              {cart.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center relative w-[40vw] border border-gray-300 rounded-lg py-2 px-11 shadow-sm"
+                >
+                  {/* Left: Product Image */}
+                  <div className="  mb-4 md:mb-0">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-[11rem]  object-contain mix-blend-darken"
+                    />
+                  </div>
+
+                  {/* Right: Product Details */}
+                  <div className="flex  w-[50%] flex-col ml-6 ">
+                    <MdOutlineClose
+                      onClick={() => deleItem(item.id, item.quantity)}
+                      className="right-5 w-10 text-2xl cursor-pointer top-5 absolute"
+                    />
+
+                    <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
+                    <p className="text-sm text-gray-600 mb-1">
+                      <span className="font-medium">Category:</span>{" "}
+                      {item.category}
+                    </p>
+
+                    <p className="text-base font-semibold mb-1">
+                      ₹{item.price.toFixed(2) * 80}
+                    </p>
+
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-2 ">
+                      <button
+                        className="px-3 pb-1 cursor-pointer font-bold text-4xl "
+                        onClick={() => {
+                          decQuantity(item.id, item.quantity);
+                        }}
+                      >
+                        -
+                      </button>
+                      <span className="px-3 font-bold text-xl">
+                        {item.quantity}
+                      </span>
+                      <button
+                        className="px-3 cursor-pointer font-bold text-3xl"
+                        onClick={() => addtocart(item.id)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* For Total price */}
+            <div className="flex-col flex gap-6">
+              <div>
+                {address && (
+                  <div className="flex items-start gap-2 p-4 border border-gray-300 rounded-xl shadow-md  w-full max-w-md">
+                    <svg
+                      className="w-6 h-6 text-indigo-600 mt-1"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 11c1.656 0 3-1.344 3-3s-1.344-3-3-3-3 1.344-3 3 1.344 3 3 3zm0 0c-3.314 0-6 2.686-6 6v4h12v-4c0-3.314-2.686-6-6-6z"
+                      />
+                    </svg>
+                    <div className="text-sm capitalize text-gray-700">
+                      <h2 className="text-base font-semibold text-gray-800 mb-1">
+                        Shipping Address
+                      </h2>
+                      {`${address.address}, ${address.city}, ${address.state} - ${address.pincode}`}
+                      <br />
+                      <span className="text-gray-600 font-medium">
+                        Phone:
+                      </span>{" "}
+                      {address.phone}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="w-[35vw] top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
+                <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+                  Price Details
+                </h2>
+
+                <div className="flex justify-between font-semibold text-sm mb-2">
+                  <span>Price ({cart && cart.length} items)</span>
+                  <span>{total && total.toFixed(2)}</span>
+                </div>
+
+                {/* For free Delivery above 500rs */}
+                <div className="flex justify-between text-sm mb-2 text-green-600">
+                  <span>Delivery Charge</span>
+                  <span>{charge ? `₹${charge}` : "Free"}</span>
+                </div>
+
+                <div className="flex font-semibold justify-between text-sm mb-2">
+                  <span>Platform Fee</span>
+                  <span>₹{platformfee}</span>
+                </div>
+
+                <div className="border-t border-gray-300 my-3"></div>
+
+                <div className="flex justify-between text-base font-semibold text-gray-900">
+                  <span>Total Amount</span>
+                  <span>
+                    ₹{total && (platformfee + total + charge).toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex mt-12  justify-center  text-base font-semibold text-gray-900">
+                  <button
+                    onClick={() => onPay()}
+                    className="w-36 py-1 font-bold border-indigo-500 cursor-pointer rounded-2xl bg-[#7788998a] ]200 border-2"
+                  >
+                    Proceed to pay
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+              Your Cart is Empty 🛒
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Looks like you haven't added anything to your cart yet.
+            </p>
             <Link
-              to={"/"}
-              className=" st:text-3xl text-2xl font-bold text-[#f8faff] hover:text-[#4e738e60]"
+              to="/userhomepage"
+              className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200"
             >
-              Go To Home
+              Go to Home
             </Link>
           </div>
-        </div>
-      ) : (
-        !order && (
-          <>
-            {" "}
-            <div className=" flex justify-center  items-center my-[10vh]">
-              <div className="flex gap-8 px-[2vw] flex-col">
-                <p className="text-2xl sm:text-left text-center font-semibold">
-                  Your Cart
-                </p>
-                {data.map((item, i) => {
-                  return item.itemCount ? (
-                    <div key={i} className="flex gap-10">
-                      <img
-                        className="md:w-[10vw] mix-blend-darken w-[9rem] object-contain"
-                        src={item.image}
-                        alt=""
-                      />
-
-                      <div className="st:text-[1.2rem] flex flex-col gap-5 font-semibold">
-                        <p>{item.title}</p>
-                        <p>Price: {item.price} $</p>
-                        <div className="flex text-2xl gap-5 items-center ">
-                          {" "}
-                          <button
-                            onClick={() => productDataColtcn(item)}
-                            className="bg-white px-[15px] cursor-pointer"
-                          >
-                            +
-                          </button>
-                          {item.itemCount}
-                          <button
-                            onClick={() => DecProduct(item)}
-                            className="bg-white px-[15px] cursor-pointer"
-                          >
-                            -
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : null;
-                })}
-              </div>
-            </div>
-            <div className=" flex justify-center flex-col items-center gap-5 text-[1.2rem] font-semibold ">
-              {" "}
-              Total : $
-              {(Math.round((result + Number.EPSILON) * 100) / 100).toFixed(2)}
-              <div
-                onClick={buy}
-                className=" cursor-pointer lg:w-[15vw] text-center rounded-2xl px-5 py-2.5 bg-[#4e738e23]"
-              >
-                Proceed to Buy
-              </div>
-            </div>
-          </>
-        )
-      )}
-      {order && (
-        <div
-          onClick={buy}
-          className="flex st:gap-5 px-[2vw] gap-2 flex-col justify-center items-center"
-        >
-          <img
-            className="st:w-[25rem] mix-blend-darken w-[20rem] object-contain rounded-[20%] "
-            src={confirm_image}
-            alt=""
-          />
-          <p className="font-semibold text-center text-2xl">
-            Order Placed Sucessfully!!
-          </p>
-          <p className=" text-[1.1rem] text-center tracking-wider">
-            We have sent you and order confirmation email.
-          </p>
-          <Link
-            to={"/"}
-            className=" mb:text-4xl text-2xl font-semibold bg-white px-4 py-2 rounded-2xl text-[#4e738e]"
-          >
-            Go To Home
-          </Link>
-        </div>
-      )}
-
+        )}
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

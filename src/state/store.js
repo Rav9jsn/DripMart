@@ -1,6 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import imageReducer from "./storage";
+import dripReducer from "./storage";
 
-export const store = configureStore({
-  reducer: { image: imageReducer },
-});
+let store;
+
+try {
+  store = configureStore({
+    reducer: { drip: dripReducer },
+  });
+} catch (err) {
+  console.error("Redux store configuration failed:", err);
+}
+
+export { store };

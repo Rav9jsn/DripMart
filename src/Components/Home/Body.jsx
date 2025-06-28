@@ -1,58 +1,73 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addImage } from "../../state/storage";
-import { prodAmount } from "../../state/storage";
-import { useSelector } from "react-redux";
-import { updateItemInArray } from "../../state/storage";
+import { addToCart, addToFavouritre, fetchAllProduct } from "../../serviced";
+import { FaHeart } from "react-icons/fa";
+import { getFavouriteList } from "../../serviced";
+import { useDispatch } from "react-redux";
+import { fetchCartItems } from "../../state/storage";
 
 const Body = () => {
   const dispatch = useDispatch();
-  const [iconTimer, setIconTimer] = useState(false);
-  const clickedImages = useSelector((state) => state.image.clickedImages);
   const navigate = useNavigate();
-  const [data, setdata] = useState(null);
+  const [iconTimer, setIconTimer] = useState(false);
+  const [favProducts, setFavProducts] = useState(null);
+  const [productData, setdata] = useState(null);
+
+  // Fetching all favourite product
+  const fetchData = async () => {
+    try {
+      const list = await getFavouriteList();
+      setFavProducts(list.favProducts);
+    } catch (err) {
+      console.log("product related error", err);
+    }
+  };
+  ////////// Fetching All Product //////////
+  const check = async () => {
+    try {
+      const { data } = await fetchAllProduct();
+      setdata(data);
+    } catch (err) {
+      console.log("fav list error", err);
+    }
+  };
   useEffect(() => {
-    const check = async () => {
-      try {
-        const fetc = await fetch("https://fakestoreapi.com/products");
-        const fetching = await fetc.json();
-        setdata(fetching);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     check();
+    fetchData();
+    dispatch(fetchCartItems());
   }, []);
+  //////fav items id///////
+  const favList = favProducts ? favProducts.map((fav) => fav.id) : "";
+
+  //////////Sucessfull item for add to cart/////
   const addedIcon = () => {
     setIconTimer(true);
     setTimeout(() => setIconTimer(false), 500);
   };
-  const productDataColtcn = (data) => {
-    let itemCount = "itemCount";
-    dispatch(prodAmount(data.price));
-    const [yo] = clickedImages.filter((item) => item.id === data.id);
-    if (yo) {
-      let u = JSON.parse(JSON.stringify(yo));
-      u.itemCount = (u.itemCount || 0) + 1;
-      dispatch(updateItemInArray(u));
-    } else {
-      data[itemCount] = 1;
-      dispatch(addImage(data));
-    }
+
+  ///////////Add to favourit Function/////////
+  const addTofav = async (id) => {
+    await addToFavouritre(id);
+    fetchData();
   };
 
+  //////ADD to Cart/////
+  const addtocart = async (id) => {
+    const res = await addToCart(id);
+    dispatch(fetchCartItems());
+    addedIcon();
+    console.log(res);
+  };
   return (
     <>
-      {" "}
-      {data ? (
+      {productData ? (
         <>
           <div className="z-10 grid md:grid-cols-3 mb:grid-cols-2 grid-cols-1  sm:gap-y-5 gap-y-2 ">
-            {data &&
-              data.map((data) => {
+            {productData &&
+              productData.map((data) => {
                 return (
                   <div
-                    className="flex flex-col bg-indigo-100 justify-between items-center"
+                    className="flex flex-col relative bg-indigo-100 justify-between items-center"
                     key={data.id}
                   >
                     <img
@@ -61,19 +76,26 @@ const Body = () => {
                           state: data,
                         });
                       }}
-                      className="w-[90%] mix-blend-darken hover:shadow hover:shadow-black cursor-pointer rounded-2xl object-contain aspect-square "
+                      className="w-[80%] mix-blend-darken hover:shadow hover:shadow-black cursor-pointer rounded-2xl object-contain aspect-square "
                       src={data?.image}
                       alt={data.category}
+                    />
+
+                    <FaHeart
+                      onClick={() => addTofav(Number(data.id))}
+                      className={`absolute top-5 text-3xl ${
+                        favList.includes(data.id) && "text-red-700"
+                      } hover:text-red-700 right-15 cursor-pointer text-[#565151] `}
                     />
                     <div className="sm:text-[1.3rem] text-center font-semibold">
                       {data.title.slice(0, 25)}...
                     </div>
                     <div className="text-[1.3rem] font-semibold">
-                      {data.price} $
+                      ₹{(data.price*80).toFixed(2)} 
                     </div>
                     <button
                       onClick={() => {
-                        productDataColtcn(data), addedIcon();
+                        addtocart(data.id);
                       }}
                       className="font-bold duration-400 bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
                     >

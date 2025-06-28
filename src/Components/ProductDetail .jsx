@@ -1,66 +1,66 @@
 import { useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import logo from "../assets/logo.svg";
-import cart from "../assets/cart.png";
-import { addImage } from "../state/storage";
-import { Link } from "react-router-dom";
-import { prodAmount } from "../state/storage";
-import { updateItemInArray } from "../state/storage";
+import Navbar from "./Home/Navbar";
+import { FaHeart } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { addToCart, addToFavouritre, getFavouriteList } from "../serviced";
+import { fetchCartItems } from "../state/storage";
+import { useDispatch } from "react-redux";
 
 const ProductDetail = () => {
-  const totalAmount = useSelector((state) => state.image.productAmounts);
-  const dataHai = useSelector((state) => state.image.clickedImages);
-  const dispatch = useDispatch();
+   const dispatch = useDispatch();
+     const [iconTimer, setIconTimer] = useState(false);
+
   const data = useLocation().state;
-  const productDataColtcn = (dataAtCart) => {
-    dispatch(prodAmount(dataAtCart.price));
-    let itemCount = "itemCount";
-    const [yo] = dataHai.filter((item) => item.id === dataAtCart.id);
-    if (yo) {
-      let u = JSON.parse(JSON.stringify(yo));
-      u.itemCount = (u.itemCount || 0) + 1;
-      dispatch(updateItemInArray(u));
-    } else {
-      data[itemCount] = 1;
-      dispatch(addImage(data));
+  const [favProducts, setFavProducts] = useState(null);
+  // Fetching all favourite product
+  const fetchData = async () => {
+    try {
+      const list = await getFavouriteList();
+      setFavProducts(list.favProducts);
+    } catch (err) {
+      console.log("product related error", err);
     }
   };
+  //////fav items id///////
+  const favList = favProducts ? favProducts.map((fav) => fav.id) : "";
+  useEffect(() => {
+    fetchData();
+  }, []);
+  ///////////Add to favourit Function/////////
+  const addTofav = async (id) => {
+    await addToFavouritre(id);
+    fetchData();
+  };
+   //////////Sucessfull item for add to cart/////
+  const addedIcon = () => {
+    setIconTimer(true);
+    setTimeout(() => setIconTimer(false), 500);
+  };
+  //////////add to cart 
+   const addtocart = async (id) => {
+      const res = await addToCart(id);
+      dispatch(fetchCartItems());
+      addedIcon();
+      console.log(res);
+    };
+    
 
   return (
     <>
-      <div className="bg-cover bg-center bg-gradient-to-r from-indigo-100 to-indigo-50 pt-[10px]  sticky top-0 z-50 px-[8px] rounded-[10px]">
-        <div className="flex justify-between items-center">
-          {/* for left logo */}
-          <Link className="w-[4%] cursor-pointer" to={"/"}>
-            <img src={logo} alt="" />
-          </Link>
-
-          {/* for center */}
-          <div className="text-3xl font-bold bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent">
-            Drip
-            <p className="bg-gradient-to-r  from-gray-400 to-gray-700 bg-clip-text text-transparent  inline-block italic text-[33px]">
-              Mart
-            </p>
-          </div>
-          {/* for right cart */}
-          <Link to={"/Cart"}>
-            <div className="relative mx-1.5">
-              {" "}
-              <img className=" cursor-pointer" src={cart} alt="" />
-              <p className=" text-white -top-1 right-0.5 bg-red-500 rounded-full absolute px-1 text-[12px] font-[700]">
-                {totalAmount.length}
-              </p>
-            </div>
-          </Link>
-        </div>
-      </div>
-      <div className="flex  md:flex-row flex-col items-center lg:gap-[250px] md:gap-[50px] gap-[10px]  justify-around">
+      <Navbar />
+      <div className="flex relative md:flex-row flex-col pb-5 items-center lg:gap-[250px] md:gap-[50px] gap-[10px]  justify-around">
         <img
-          className="w-[23rem] mix-blend-darken object-contain	 hover:shadow hover:shadow-black rounded-4xl"
+          className="w-[21rem] mix-blend-darken object-contain	 hover:shadow hover:shadow-black rounded-4xl"
           src={data?.image}
-          alt=""
+          alt={data.title}
         />
-        <div className="flex flex-col  items-center text-center md:gap-[40px] gap-[10px] md:pt-[150px] lg:my-[50px]">
+        <FaHeart
+          onClick={() => addTofav(Number(data.id))}
+          className={`absolute top-9 text-3xl ${
+            favList.includes(data.id) && "text-red-700"
+          } hover:text-red-700 left-70 cursor-pointer text-[#565151] `}
+        />
+        <div className="flex flex-col  items-center text-center md:gap-[40px] gap-[10px]">
           <div className="text-[1.7rem] lg:w-[60%]  font-semibold">
             {data.title}
           </div>
@@ -70,11 +70,10 @@ const ProductDetail = () => {
             {data.description}
             <p className="capitalize mt-4">Category:- {data.category}</p>
           </div>
-          <div className="text-[1.5rem] font-semibold">{data.price} $</div>
-          <button
-            onClick={() => productDataColtcn(data)}
-            className="font-bold bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
-          >
+          <div className="text-[1.5rem] font-semibold">₹{(data.price*80).toFixed(2)}</div>
+          <button onClick={() => {
+                        addtocart(data.id);
+                      }} className="font-bold bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]">
             {" "}
             Add To Cart
           </button>
@@ -85,6 +84,13 @@ const ProductDetail = () => {
             <p className="text-[1.1rem] font-semibold">
               Rated {data.rating?.rate} / 5 by {data.rating?.count}+ Users
             </p>
+            <div>
+            {iconTimer && (
+              <div className=" bg-gradient-to-r st:font-bold font-semibold animate-bounce md:left-[42vw] left-1/6 st:ml-0  mb:left-1/3 text-[#8D0B41] from-violet-200 to-pink-200 fixed z-10 top-25 mb:px-5 px-2 st:py-3 py-1 rounded-full">
+                <p>🎉 Item added successfully!</p>
+              </div>
+            )}
+          </div>
           </div>
         </div>
       </div>{" "}
