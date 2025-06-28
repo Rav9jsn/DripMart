@@ -101,8 +101,7 @@ const App = () => {
                   />
                 }
               />
-           
-             
+
               <Route
                 path="/favouritlist"
                 element={
@@ -142,6 +141,10 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </>
           )}
+          <Routes>
+            {/* Your existing routes */}
+            <Route path="/" element={<Navigate to="/login" />} />
+          </Routes>
         </Routes>
       </div>
     </Router>
