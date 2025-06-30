@@ -27,6 +27,9 @@
   width: fit-content;
   animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
 }
+html{
+   scroll-behavior: smooth;
+}
 
 body {
   --sb-track-color: #cad6dc;

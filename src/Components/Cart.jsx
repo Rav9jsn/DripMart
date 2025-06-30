@@ -32,22 +32,24 @@ const Cart = () => {
     }
   }, []);
 
+  const refreshCart = () => {
+  dispatch(fetchCartItems());
+  deliveryCharge();
+};
+
   const addtocart = async (id) => {
     await addToCart(id);
-    dispatch(fetchCartItems());
-    deliveryCharge();
+   refreshCart();
   };
 
   const decQuantity = async (id, num) => {
     await decQuantToCart(id);
-    dispatch(fetchCartItems());
     itemoneThenDelte(id, num);
-    deliveryCharge();
+    refreshCart();
   };
   const deleItem = async (id) => {
     await deletItemFromCart(id);
-    dispatch(fetchCartItems());
-    deliveryCharge();
+   refreshCart();
   };
 
   const itemoneThenDelte = (id = 0, item) => {
@@ -82,6 +84,8 @@ const Cart = () => {
       navigate("/adressform");
     }
   };
+  const getTotalAmount = () => platformfee + total + charge;
+
   return (
     <>
       <Navbar />
@@ -209,7 +213,7 @@ const Cart = () => {
                 <div className="flex justify-between text-base font-semibold text-gray-900">
                   <span>Total Amount</span>
                   <span>
-                    ₹{total && (platformfee + total + charge).toFixed(2)}
+                    ₹{total && getTotalAmount().toFixed(2)}
                   </span>
                 </div>
                 <div className="flex mt-12  justify-center  text-base font-semibold text-gray-900">
