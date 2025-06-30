@@ -58,16 +58,11 @@ const Navbar = () => {
           </p>
         </div>
         {/* for right cart */}
-        <div className="flex items-center gap-10">
-          {!tokenValue && (
-            <div>
-              <Link to={"/signup"}>Signup</Link>
-              <Link to={"/login"}> Login</Link>
-            </div>
-          )}
+        <div className="flex items-center sm:gap-10">
+          
 
           <Link to={"/Cart"}>
-            <div className="relative mx-1.5">
+            <div className="relative sm:block hidden mx-1.5">
               {" "}
               <img className=" cursor-pointer" src={cart_logo} alt="" />
               <p className=" text-white -top-1 right-0.5 bg-red-500 rounded-full absolute px-1 text-[12px] font-[700]">
@@ -79,7 +74,7 @@ const Navbar = () => {
           {tokenValue && (
             <div
               onMouseEnter={showProfile}
-              // onMouseOut={showProfile}
+              onClick={showProfile}
               className="w-10 h-10 bg-indigo-400 hover:bg-indigo-500 cursor uppercase text-2xl mb-1 font-bold text-white flex items-center justify-center rounded-full"
             >
               {NameFirstletter}

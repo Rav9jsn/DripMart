@@ -26,12 +26,11 @@ const Cart = () => {
   const total = useSelector((state) => state.drip.data?.totalPrice) * 80;
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    dispatch(fetchCartItems());
-  }
-}, []);
-
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchCartItems());
+    }
+  }, []);
 
   const addtocart = async (id) => {
     await addToCart(id);
@@ -88,12 +87,12 @@ const Cart = () => {
       <Navbar />
       <div>
         {cart ? (
-          <div className="flex gap-14 relative px-10">
-            <div className="flex flex-col justify-center items-center gap-6 ">
-              <div className="font-bold text-3xl"> Your Cart Items</div>
+          <div className="flex md:flex-row flex-col lg:justify-around justify-between gap-7 st:gap-10 relative lg:px-10 ">
+            <div className="flex flex-col  justify-center items-center gap-6 ">
+              <div className="font-bold st:text-3xl text-2xl"> Your Cart Items</div>
               <div
                 onClick={() => DelteAllCart()}
-                className="cursor-pointer font-bold w-[17%] ml-[31vw] py-1 text-center backdrop-blur-2xl shadow-md shadow-gray-400 px-5"
+                className="cursor-pointer font-bold w-[6.5rem] py-1 text-center ml-auto backdrop-blur-2xl shadow-md shadow-gray-400 px-5"
               >
                 Clear All
               </div>
@@ -101,32 +100,31 @@ const Cart = () => {
               {cart.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center relative w-[40vw] border border-gray-300 rounded-lg py-2 px-11 shadow-sm"
+                  className="flex items-center relative lg:w-[31rem] md:w-[25rem] w-full  border border-gray-300 rounded-lg py-2 st:px-11 px-1  shadow-sm"
                 >
                   {/* Left: Product Image */}
-                  <div className="  mb-4 md:mb-0">
+                  <div className=" mb-4 md:mb-0">
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-[11rem]  object-contain mix-blend-darken"
+                      className="lg:w-[11rem] w-[7rem] object-contain mix-blend-darken"
                     />
                   </div>
 
                   {/* Right: Product Details */}
-                  <div className="flex  w-[50%] flex-col ml-6 ">
+                  <div className="flex  w-full flex-col ml-6 ">
                     <MdOutlineClose
                       onClick={() => deleItem(item.id, item.quantity)}
-                      className="right-5 w-10 text-2xl cursor-pointer top-5 absolute"
+                      className="right-2 w-5 rounded-md  text-2xl cursor-pointer top-3 absolute"
                     />
-
-                    <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
+                    <h3 className="sm:text-lg font-semibold mb-1">{item.title}</h3>
                     <p className="text-sm text-gray-600 mb-1">
                       <span className="font-medium">Category:</span>{" "}
                       {item.category}
                     </p>
 
                     <p className="text-base font-semibold mb-1">
-                      ₹{item.price.toFixed(2) * 80}
+                      ₹{(item.price * 80).toFixed(2)}
                     </p>
 
                     {/* Quantity Controls */}
@@ -157,7 +155,7 @@ const Cart = () => {
             <div className="flex-col flex gap-6">
               <div>
                 {address && (
-                  <div className="flex items-start gap-2 p-4 border border-gray-300 rounded-xl shadow-md  w-full max-w-md">
+                  <div className="flex  items-start gap-2 p-4 border border-gray-300 rounded-xl shadow-md  w-full max-w-md">
                     <svg
                       className="w-6 h-6 text-indigo-600 mt-1"
                       fill="none"
@@ -185,7 +183,7 @@ const Cart = () => {
                   </div>
                 )}
               </div>
-              <div className="w-[35vw] top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
+              <div className="w-full md:max-w-md top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
                 <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
                   Price Details
                 </h2>

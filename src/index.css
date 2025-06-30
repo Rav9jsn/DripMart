@@ -11,6 +11,22 @@
   --breakpoint-mb: 33rem;
   --breakpoint-st: 27rem;
 }
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+.typing {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #7a99c5;
+  width: fit-content;
+  animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
+}
 
 body {
   --sb-track-color: #cad6dc;

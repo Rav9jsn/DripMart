@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AdminHome = () => {
   const [admin, setAdmin] = useState({ name: "", role: "" });
-    const navigate= useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     const name = localStorage.getItem("name") || "Admin";
     const role = localStorage.getItem("role") || "admin";
@@ -13,24 +13,30 @@ const AdminHome = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-gray-100 p-6">
-      <button className=" cursor-pointer bg-emerald-600 p-5 font-bold text-emerald-50 rounded-4xl"
+      <button
+        className=" cursor-pointer bg-white/40 p-3 font-bold text-black rounded-2xl"
         onClick={() => {
           localStorage.removeItem("name");
           localStorage.removeItem("role");
           localStorage.removeItem("token");
           localStorage.removeItem("email");
-          navigate('/login')
+          navigate("/login");
         }}
-      >LogOut</button>
+      >
+        LogOut
+      </button>
       <div className="max-w-5xl mx-auto">
         <header className="flex justify-between items-center py-6">
           <h1 className="text-3xl font-bold text-gray-800">
             Welcome, <span className="text-blue-600">{admin.name}</span>
           </h1>
-          <span className="bg-blue-200 text-blue-700 px-4 py-1 rounded-full text-sm font-semibold">
-            Role: {admin.role}
+          <span className="bg-blue-200 uppercase text-blue-700 px-4 py-1 rounded-lg text-sm font-semibold">
+            {admin.role}
           </span>
         </header>
+        <div className="text-xl font-semibold text-gray-700 typing mx-auto">
+          Admin page build starting soon...
+        </div>
 
         <main className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 mt-10">
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition duration-300">

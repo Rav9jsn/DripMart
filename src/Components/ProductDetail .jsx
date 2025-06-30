@@ -50,15 +50,15 @@ const ProductDetail = () => {
       <Navbar />
       <div className="flex relative md:flex-row flex-col pb-5 items-center lg:gap-[250px] md:gap-[50px] gap-[10px]  justify-around">
         <img
-          className="w-[21rem] mix-blend-darken object-contain	 hover:shadow hover:shadow-black rounded-4xl"
+          className="sm:w-[21rem] w-[17rem] mix-blend-darken object-contain	 hover:shadow md:hover:shadow-black shadow-black rounded-4xl"
           src={data?.image}
           alt={data.title}
         />
         <FaHeart
           onClick={() => addTofav(Number(data.id))}
-          className={`absolute top-9 text-3xl ${
+          className={`absolute md:top-9 sm:top-3 -top-1 text-3xl ${
             favList.includes(data.id) && "text-red-700"
-          } hover:text-red-700 left-70 cursor-pointer text-[#565151] `}
+          } hover:text-red-700 md:left-70 right-10 cursor-pointer text-[#565151] `}
         />
         <div className="flex flex-col  items-center text-center md:gap-[40px] gap-[10px]">
           <div className="text-[1.7rem] lg:w-[60%]  font-semibold">

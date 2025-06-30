@@ -17,6 +17,7 @@ const Order = () => {
 
   if (!order) {
     return (
+      <div> <Navbar />
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="animate-pulse space-y-4 w-full max-w-md">
           <div className="h-6 bg-gray-300 rounded w-3/4 mx-auto"></div>
@@ -24,6 +25,7 @@ const Order = () => {
           <div className="h-10 bg-gray-300 rounded w-full"></div>
         </div>
       </div>
+      </div> 
     );
   }
 
@@ -61,7 +63,7 @@ const Order = () => {
                 deliveryDate.setDate(deliveryDate.getDate() + 7);
 
                 return (
-                  <div key={i} className="max-w-4xl mx-auto backdrop-blur-lg shadow-2xl rounded-[2rem] p-8 border-white/20 transition-all duration-300">
+                  <div key={i} className="max-w-4xl w-full mx-auto backdrop-blur-lg shadow-2xl rounded-[2rem] p-8 border-white/20 transition-all duration-300">
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                       🧾 Order Summary
                     </h2>
@@ -80,7 +82,7 @@ const Order = () => {
                       {items.map((item, i) => (
                         <div
                           key={i}
-                          className="flex flex-col md:flex-row items-center md:items-start justify-between bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition gap-6"
+                          className="flex flex-col sm:flex-row items-center md:items-start justify-between   bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition md:gap-6"
                         >
                           <div className="flex items-center gap-4 w-full md:w-2/3">
                             <img
@@ -99,11 +101,11 @@ const Order = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-col items-end md:items-center md:w-1/3 text-right md:text-left">
+                          <div className="flex flex-col ml-auto items-end md:items-center md:w-1/3 text-right md:text-left">
                             <div className="font-bold text-indigo-600 text-lg md:text-xl">
                               ₹{(item.price * 80 * item.quantity).toFixed(2)}
                             </div>
-                            <p className="text-xs text-green-600 mt-1 md:mt-2">
+                            <p className="text-xs text-green-600 mt-1 md:ml-0 sm:ml-10 md:mt-2">
                               🚚 Delivered on:{" "}
                               {deliveryDate.toLocaleDateString("en-IN", {
                                 day: "numeric",

@@ -53,10 +53,9 @@ const Body = () => {
 
   //////ADD to Cart/////
   const addtocart = async (id) => {
-    const res = await addToCart(id);
-    dispatch(fetchCartItems());
     addedIcon();
-    console.log(res);
+    await addToCart(id);
+    dispatch(fetchCartItems());
   };
   return (
     <>
@@ -67,37 +66,39 @@ const Body = () => {
               productData.map((data) => {
                 return (
                   <div
-                    className="flex flex-col relative bg-indigo-100 justify-between items-center"
+                    className="flex flex-col relative  bg-indigo-100 justify-between items-center"
                     key={data.id}
                   >
-                    <img
-                      onClick={() => {
-                        navigate(`/Home/${data.title.slice(1, 20)}`, {
-                          state: data,
-                        });
-                      }}
-                      className="w-[80%] mix-blend-darken hover:shadow hover:shadow-black cursor-pointer rounded-2xl object-contain aspect-square "
-                      src={data?.image}
-                      alt={data.category}
-                    />
+                    <div className=" w-[90%] flex cursor-pointer rounded-2xl py-2 justify-center shadow md:shadow-indigo-100 hover:shadow-black shadow-black ">
+                      <img
+                        onClick={() => {
+                          navigate(`/Home/${data.title.slice(1, 20)}`, {
+                            state: data,
+                          });
+                        }}
+                        className="sm:w-[80%] w-[70%]  mix-blend-darken  object-contain aspect-square "
+                        src={data?.image}
+                        alt={data.category}
+                      />
 
-                    <FaHeart
-                      onClick={() => addTofav(Number(data.id))}
-                      className={`absolute top-5 text-3xl ${
-                        favList.includes(data.id) && "text-red-700"
-                      } hover:text-red-700 right-15 cursor-pointer text-[#565151] `}
-                    />
+                      <FaHeart
+                        onClick={() => addTofav(Number(data.id))}
+                        className={`absolute  md:top-1 top-1 text-3xl ${
+                          favList.includes(data.id) && "text-red-700"
+                        } hover:text-red-700 sm:right-18 md:right-5 lg:right-15 right-9 cursor-pointer text-[#565151] `}
+                      />
+                    </div>
                     <div className="sm:text-[1.3rem] text-center font-semibold">
                       {data.title.slice(0, 25)}...
                     </div>
                     <div className="text-[1.3rem] font-semibold">
-                      ₹{(data.price*80).toFixed(2)} 
+                      ₹{(data.price * 80).toFixed(2)}
                     </div>
                     <button
                       onClick={() => {
                         addtocart(data.id);
                       }}
-                      className="font-bold duration-400 bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[10px]"
+                      className="sm:font-bold font-semibold duration-400 bg-indigo-500 rounded-[8px] cursor-pointer text-white  py-[8px] px-[9px]"
                     >
                       {" "}
                       Add To Cart
