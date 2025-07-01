@@ -11,8 +11,7 @@ export const createAccount = async (user) => {
       },
       body: JSON.stringify(user),
     });
-    const res = await api.json();
-    return res;
+    return await api.json();
   } catch (err) {
     console.error("createAccount", err);
   }
@@ -38,7 +37,7 @@ export const userLogin = async (user) => {
 // Retrieve JWT token from localStorage
 const getToken = () => {
   const token = localStorage.getItem("token");
-  return token || '';
+  return token || "";
 };
 
 // Generate headers with optional JSON content-type

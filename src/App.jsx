@@ -16,7 +16,7 @@ import AddressForm from "./Components/AddressForm";
 import Adminhome from "./Components/admin/Adminhome";
 import { lazy, Suspense } from "react";
 import LoadingSpinner from "./Loadingspinner ";
-const Homepage = lazy(() => import("./Components/Homepage"));
+import Homepage from "./Components/Homepage";
 const Favourite = lazy(() => import("./Favourite"));
 const Order = lazy(() => import("./Components/Order"));
 const Cart = lazy(() => import("./Components/Cart"));
@@ -37,87 +37,78 @@ const App = () => {
         <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
         <ScrollToTop />
         <Routes>
-  <Route path="/" element={<Navigate to="/login" />} />
-  <Route path="/signup" element={<Signup />} />
-  <Route path="/login" element={<Login setRole={setRole} />} />
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login setRole={setRole} />} />
 
-  {role === "admin" && (
-    <>
-      <Route
-        path="/adminhome"
-        element={<PrivateRoute element={<Adminhome />} />}
-      />
-      <Route path="*" element={<NotFound />} />
-    </>
-  )}
+          {role === "admin" && (
+            <>
+              <Route
+                path="/adminhome"
+                element={<PrivateRoute element={<Adminhome />} />}
+              />
+              <Route path="*" element={<NotFound />} />
+            </>
+          )}
 
-  {role === "user" && (
-    <>
-      <Route
-        path="/Cart/paymentsuccess"
-        element={<PrivateRoute element={<Paymentsuccess />} />}
-      />
-      <Route
-        path="/adressform"
-        element={<PrivateRoute element={<AddressForm />} />}
-      />
-      <Route
-        path="/home/:id"
-        element={<PrivateRoute element={<ProductDetail />} />}
-      />
-      <Route
-        path="/Cart"
-        element={
-          <PrivateRoute
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <Cart />
-              </Suspense>
-            }
-          />
-        }
-      />
-      <Route
-        path="/userhomepage"
-        element={
-          <PrivateRoute
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <Homepage />
-              </Suspense>
-            }
-          />
-        }
-      />
-      <Route
-        path="/favouritlist"
-        element={
-          <PrivateRoute
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <Favourite />
-              </Suspense>
-            }
-          />
-        }
-      />
-      <Route
-        path="/orders"
-        element={
-          <PrivateRoute
-            element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <Order />
-              </Suspense>
-            }
-          />
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </>
-  )}
-</Routes>
-
+          {role === "user" && (
+            <>
+              <Route
+                path="/Cart/paymentsuccess"
+                element={<PrivateRoute element={<Paymentsuccess />} />}
+              />
+              <Route
+                path="/adressform"
+                element={<PrivateRoute element={<AddressForm />} />}
+              />
+              <Route
+                path="/home/:id"
+                element={<PrivateRoute element={<ProductDetail />} />}
+              />
+              <Route
+                path="/Cart"
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Cart />
+                      </Suspense>
+                    }
+                  />
+                }
+              />
+              <Route
+                path="/userhomepage"
+                element={<PrivateRoute element={<Homepage />} />}
+              />
+              <Route
+                path="/favouritlist"
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Favourite />
+                      </Suspense>
+                    }
+                  />
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Order />
+                      </Suspense>
+                    }
+                  />
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </>
+          )}
+        </Routes>
       </div>
     </Router>
   );

@@ -35,7 +35,7 @@ const navigate = useNavigate()
         email,
       } = result;
       const [Adress] = address || [];
-      setresult(`${role} ${message}`);
+      setresult({message});
       if (success) {
         localStorage.setItem("role", role);
         setRole(role);
@@ -76,7 +76,7 @@ const navigate = useNavigate()
       <div className="flex items-center justify-center min-h-screen ">
         {result && (
           <p className="bg-blue-100 fixed top-3 text-blue-800 px-4 py-2 rounded-md shadow-md text-center mb-4 animate-fade-in">
-            {result}
+             {result.message}
           </p>
         )}
         <form

@@ -159,7 +159,7 @@ const Cart = () => {
             <div className="flex-col flex gap-6">
               <div>
                 {address && (
-                  <div className="flex  items-start gap-2 p-4 border border-gray-300 rounded-xl shadow-md  w-full max-w-md">
+                  <div className="flex  items-start gap-2 p-4 border border-gray-300 rounded-xl shadow-md  w-full lg:w-[37vw] md:w-[37vw]">
                     <svg
                       className="w-6 h-6 text-indigo-600 mt-1"
                       fill="none"
@@ -187,7 +187,7 @@ const Cart = () => {
                   </div>
                 )}
               </div>
-              <div className="w-full md:max-w-md top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
+              <div className="w-full lg:w-[37vw] md:w-[37vw] top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
                 <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
                   Price Details
                 </h2>

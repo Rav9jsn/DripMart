@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { createAccount } from "../../serviced";
 import { Link } from "react-router-dom";
 const Signup = () => {
+  const [userData, setuserData] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
@@ -23,37 +25,53 @@ const Signup = () => {
     }
   };
 
- const submitHandler = async (e) => {
-  e.preventDefault();
-  try {
-    const created = await createAccount(user);
-    const { message, success, errors } = created;
-    console.log(errors);
-    console.log(!errors&&message);
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const created = await createAccount(user);
 
-    if (success) {
-      setTimeout(() => {
-        setUser({
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          role: "",
-        });
-      }, 500);
-      navigate("/login");
+      if (created.errors) {
+        setError(created.errors);
+      } else {
+        setuserData(created);
+        setError(null);
+        if (created.success) {
+          setTimeout(() => {
+            setUser({
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+              role: "",
+            });
+            navigate("/login");
+          }, 400);
+        }
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
     }
-  } catch (error) {
-    console.error("Signup error:", error);
-   
-  }
-};
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-50">
+    <div className="flex flex-col gap-5  items-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-50">
+      <div className="absolute top-1">
+        {error &&
+          error.map((err, i) => {
+            return (
+              <div key={i}>
+                <p>
+                  {err.msg} for{" "}
+                  <span className="font-bold uppercase">{err.path}</span>
+                </p>
+              </div>
+            );
+          })}
+      </div>
+      {userData && <div className=" font-bold uppercase absolute top-24">{userData.message}</div>}
       <form
         onSubmit={submitHandler}
-        className="flex flex-col gap-2 p-8 bg-[#ffffffcb] shadow-lg rounded-2xl w-[90%] max-w-md border-4 border-indigo-300"
+        className="flex flex-col gap-2 p-8 mt-30 bg-[#ffffffcb] shadow-lg rounded-2xl w-[90%] max-w-md border-4 border-indigo-300"
       >
         <label className="text-gray-700 font-semibold">Name</label>
         <input
@@ -71,9 +89,9 @@ const Signup = () => {
         <label className="text-gray-700 font-semibold">Email</label>
         <input
           type="email"
-          required
           value={user.email}
           name="email"
+          required
           onChange={handleInput}
           autoComplete="username"
           placeholder="your@mail.com"
@@ -118,8 +136,8 @@ const Signup = () => {
           <label className="flex items-center gap-2 text-gray-700 font-medium">
             <input
               type="radio"
-              name="role"
               required
+              name="role"
               checked={user.role === "admin"}
               value="admin"
               onChange={handleInput}

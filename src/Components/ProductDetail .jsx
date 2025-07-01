@@ -38,10 +38,10 @@ const ProductDetail = () => {
   };
   //////////add to cart 
    const addtocart = async (id) => {
-      const res = await addToCart(id);
+     await addToCart(id);
+     addedIcon();
       dispatch(fetchCartItems());
-      addedIcon();
-      console.log(res);
+      
     };
     
 
