@@ -1,30 +1,26 @@
-import { useEffect, useState } from "react";
-import { getFavouriteList, removeFav } from "./serviced";
+import { useEffect } from "react";
+import { removeFav } from "./serviced";
 import Navbar from "./Components/Home/Navbar";
+import { fetchFavItems, updateFavouritesItem } from "./state/storage";
+import { useDispatch, useSelector } from "react-redux";
 
 const Favourite = () => {
-  const [favProducts, setFavProducts] = useState(null);
-
-  const fetchData = async () => {
-    try {
-      const list = await getFavouriteList();
-      setFavProducts(list.favProducts);
-    } catch (err) {
-      console.error("Failed to fetch favorites:", err);
-    }
-  };
-
+  const dispatch = useDispatch();
+  const favProducts = useSelector(
+    (state) => state.drip?.favItemsData?.favProducts
+  );
   const removFavourite = async (id) => {
     try {
+      dispatch(updateFavouritesItem({ id }));
+      
       await removeFav(id);
-      fetchData();
     } catch (err) {
       console.error(`Failed to remove item ${id} from favorites:`, err);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchFavItems());
   }, []);
 
   return (

@@ -3,24 +3,21 @@ import cart_logo from "../../assets/cart.png";
 import { Link } from "react-router-dom";
 import Logout from "../auth/Logout";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCartItems } from "../../state/storage";
+import {  useSelector } from "react-redux";
+
 
 const Navbar = () => {
   const state = useSelector((state) => state.drip.data);
   const [clickProfile, setClickProfile] = useState(false);
   const [numberCart, setnumberCart] = useState(0);
 
-  const dispatch = useDispatch();
   const tokenValue = localStorage.getItem("token");
-
   const NameFirstletter =
     localStorage.getItem("name") && localStorage.getItem("name").charAt(0);
   const showProfile = () => {
     setClickProfile(!clickProfile);
   };
   const cart = () => {
-    dispatch(fetchCartItems());
     if (state) {
       const { cartProducts } = state;
       if (Array.isArray(cartProducts)) {

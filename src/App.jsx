@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { useState } from "react";
 import {
   BrowserRouter as Router,
@@ -7,19 +8,19 @@ import {
 } from "react-router-dom";
 import ProductDetail from "./Components/ProductDetail ";
 import ScrollToTop from "./Components/ScrollToTop";
-import NotFound from "./Components/NotFound";
 import Signup from "./Components/auth/Signup";
 import Login from "./Components/auth/Login";
 import RefreshHandler from "./RefreshHandler";
-import Paymentsuccess from "./Paymentsuccess";
-import AddressForm from "./Components/AddressForm";
-import Adminhome from "./Components/admin/Adminhome";
-import { lazy, Suspense } from "react";
 import LoadingSpinner from "./Loadingspinner ";
 import Homepage from "./Components/Homepage";
+
+const NotFound = lazy(() => import("./Components/NotFound"));
+const Paymentsuccess = lazy(() => import("./Paymentsuccess"));
 const Favourite = lazy(() => import("./Favourite"));
 const Order = lazy(() => import("./Components/Order"));
 const Cart = lazy(() => import("./Components/Cart"));
+const AddressForm = lazy(() => import("./Components/AddressForm"));
+const Adminhome = lazy(() => import("./Components/admin/Adminhome"));
 
 const App = () => {
   const [role, setRole] = useState(localStorage.getItem("role"));
@@ -45,9 +46,28 @@ const App = () => {
             <>
               <Route
                 path="/adminhome"
-                element={<PrivateRoute element={<Adminhome />} />}
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <Adminhome />
+                      </Suspense>
+                    }
+                  />
+                }
               />
-              <Route path="*" element={<NotFound />} />
+              <Route
+                path="*"
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <NotFound />
+                      </Suspense>
+                    }
+                  />
+                }
+              />
             </>
           )}
 
@@ -55,11 +75,28 @@ const App = () => {
             <>
               <Route
                 path="/Cart/paymentsuccess"
-                element={<PrivateRoute element={<Paymentsuccess />} />}
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<Paymentsuccess />}>
+                        <Cart />
+                      </Suspense>
+                    }
+                  />
+                }
               />
+
               <Route
                 path="/adressform"
-                element={<PrivateRoute element={<AddressForm />} />}
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <AddressForm />
+                      </Suspense>
+                    }
+                  />
+                }
               />
               <Route
                 path="/home/:id"
@@ -105,7 +142,18 @@ const App = () => {
                   />
                 }
               />
-              <Route path="*" element={<NotFound />} />
+              <Route
+                path="*"
+                element={
+                  <PrivateRoute
+                    element={
+                      <Suspense fallback={<LoadingSpinner />}>
+                        <NotFound />
+                      </Suspense>
+                    }
+                  />
+                }
+              />
             </>
           )}
         </Routes>

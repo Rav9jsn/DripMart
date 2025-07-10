@@ -2,27 +2,30 @@ import Navbar from "./Home/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "./Footer";
 import { useEffect } from "react";
-import { fetchCartItems } from "../state/storage";
-import { orderCreate } from "../serviced";
+import { clearCartData, deleteOneItem, fetchCartItems } from "../state/storage";
+import { deletItemFromCart, orderCreate } from "../serviced";
 
-import {
-  addToCart,
-  clearCart,
-  decQuantToCart,
-  deletItemFromCart,
-  paymentCheckout,
-} from "../serviced";
+import { clearCart, paymentCheckout } from "../serviced";
 import { MdOutlineClose } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import useAddtocart from "../UseAddtocart";
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const {
+    iconTimer,
+    animtionforUntilAdd,
+    addingItemId,
+    message,
+    removeFromCart,
+    addtoCart,
+  } = useAddtocart();
   const adressHave = localStorage.getItem("adressHave");
   const address =
     adressHave === "true" && JSON.parse(localStorage.getItem("address"));
-  const dispatch = useDispatch();
   const platformfee = 80;
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.drip.data?.cartProducts);
+  const cart = useSelector((state) => state.drip?.data?.cartProducts);
   const total = useSelector((state) => state.drip.data?.totalPrice) * 80;
 
   useEffect(() => {
@@ -32,31 +35,20 @@ const Cart = () => {
     }
   }, []);
 
-  const refreshCart = () => {
-  dispatch(fetchCartItems());
-  deliveryCharge();
-};
 
+  // Add To Cart
   const addtocart = async (id) => {
-    await addToCart(id);
-   refreshCart();
+    await addtoCart(id);
   };
 
+  // Remove from Cart
   const decQuantity = async (id, num) => {
-    await decQuantToCart(id);
-    itemoneThenDelte(id, num);
-    refreshCart();
+    await removeFromCart(id, num);
   };
   const deleItem = async (id) => {
-    await deletItemFromCart(id);
-   refreshCart();
-  };
-
-  const itemoneThenDelte = (id = 0, item) => {
-    if (id && item === 1) {
-      deleItem(id);
-    }
-  };
+      dispatch(deleteOneItem(id));
+      await deletItemFromCart(id);
+    };
 
   const deliveryCharge = () => {
     let charge = 80;
@@ -69,8 +61,8 @@ const Cart = () => {
   const charge = deliveryCharge();
 
   const DelteAllCart = async () => {
+    dispatch(clearCartData());
     await clearCart();
-    dispatch(fetchCartItems());
   };
 
   const onPay = async () => {
@@ -90,10 +82,13 @@ const Cart = () => {
     <>
       <Navbar />
       <div>
-        {cart ? (
+        {cart && cart.length !== 0 ? (
           <div className="flex md:flex-row flex-col lg:justify-around justify-between gap-7 st:gap-10 relative lg:px-10 ">
             <div className="flex flex-col  justify-center items-center gap-6 ">
-              <div className="font-bold st:text-3xl text-2xl"> Your Cart Items</div>
+              <div className="font-bold st:text-3xl text-2xl">
+                {" "}
+                Your Cart Items
+              </div>
               <div
                 onClick={() => DelteAllCart()}
                 className="cursor-pointer font-bold w-[6.5rem] py-1 text-center ml-auto backdrop-blur-2xl shadow-md shadow-gray-400 px-5"
@@ -102,7 +97,8 @@ const Cart = () => {
               </div>
 
               {cart.map((item) => (
-                <div
+                
+                 <div
                   key={item.id}
                   className="flex items-center relative lg:w-[31rem] md:w-[25rem] w-full  border border-gray-300 rounded-lg py-2 st:px-11 px-1  shadow-sm"
                 >
@@ -121,7 +117,9 @@ const Cart = () => {
                       onClick={() => deleItem(item.id, item.quantity)}
                       className="right-2 w-5 rounded-md  text-2xl cursor-pointer top-3 absolute"
                     />
-                    <h3 className="sm:text-lg font-semibold mb-1">{item.title}</h3>
+                    <h3 className="sm:text-lg font-semibold mb-1">
+                      {item.title}
+                    </h3>
                     <p className="text-sm text-gray-600 mb-1">
                       <span className="font-medium">Category:</span>{" "}
                       {item.category}
@@ -132,9 +130,19 @@ const Cart = () => {
                     </p>
 
                     {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 ">
+                    <div
+                      className={` ${
+                        animtionforUntilAdd && addingItemId === item.id
+                          ? "bg-gray-300 opacity-20 animate-shake duration-150 text-black "
+                          : null
+                      }  flex w-[9rem]  items-center gap-2 `}
+                    >
                       <button
-                        className="px-3 pb-1 cursor-pointer font-bold text-4xl "
+                        className={`${
+                          animtionforUntilAdd && addingItemId === item.id
+                            ? "cursor-none"
+                            : "cursor-pointer"
+                        } px-3 pb-1  font-bold text-4xl`}
                         onClick={() => {
                           decQuantity(item.id, item.quantity);
                         }}
@@ -145,7 +153,11 @@ const Cart = () => {
                         {item.quantity}
                       </span>
                       <button
-                        className="px-3 cursor-pointer font-bold text-3xl"
+                        className={`px-3 font-bold text-3xl ${
+                          animtionforUntilAdd && addingItemId === item.id
+                            ? "cursor-none"
+                            : "cursor-pointer"
+                        }`}
                         onClick={() => addtocart(item.id)}
                       >
                         +
@@ -187,7 +199,7 @@ const Cart = () => {
                   </div>
                 )}
               </div>
-              <div className="w-full lg:w-[37vw] md:w-[37vw] top-[20vh] h-[45vh] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
+              <div className="w-full lg:w-[37vw] md:w-[37vw] top-[20vh] h-[20rem] sticky  right-[10rem]  shadow-md shadow-indigo-400 rounded-lg border border-[#80808028] p-5">
                 <h2 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
                   Price Details
                 </h2>
@@ -212,9 +224,7 @@ const Cart = () => {
 
                 <div className="flex justify-between text-base font-semibold text-gray-900">
                   <span>Total Amount</span>
-                  <span>
-                    ₹{total && getTotalAmount().toFixed(2)}
-                  </span>
+                  <span>₹{total && getTotalAmount().toFixed(2)}</span>
                 </div>
                 <div className="flex mt-12  justify-center  text-base font-semibold text-gray-900">
                   <button
@@ -225,6 +235,15 @@ const Cart = () => {
                   </button>
                 </div>
               </div>
+            </div>
+            <div>
+              {iconTimer && (
+                <div className=" bg-gradient-to-r st:font-bold font-semibold animate-bounce md:left-[42vw] left-1/6 st:ml-0  mb:left-1/3 text-[#8D0B41] from-violet-200 to-pink-200 fixed z-10 top-25 mb:px-5 px-2 st:py-3 py-1 rounded-full">
+                  <p>
+                    🎉 Item <span>{message}</span> successfully!
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ) : (
