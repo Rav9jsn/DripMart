@@ -6,7 +6,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ProductDetail from "./Components/ProductDetail ";
+import ProductDetail from "./Components/ProductDetail";
 import ScrollToTop from "./Components/ScrollToTop";
 import Signup from "./Components/auth/Signup";
 import Login from "./Components/auth/Login";
