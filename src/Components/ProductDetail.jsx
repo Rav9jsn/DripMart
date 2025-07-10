@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { useEffect } from "react";
 import { addToCart, addToFavouritre, removeFav } from "../serviced";
 import { useDispatch, useSelector } from "react-redux";
-import useAddtocart from "../UseAddtocart";
+import useAddtocart from "../useAddtocart";
 import { fetchFavItems, updateFavouritesItem } from "../state/storage";
 
 const ProductDetail = () => {

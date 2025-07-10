@@ -8,7 +8,7 @@ import { deletItemFromCart, orderCreate } from "../serviced";
 import { clearCart, paymentCheckout } from "../serviced";
 import { MdOutlineClose } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import useAddtocart from "../UseAddtocart";
+import useAddtocart from "../useAddtocart";
 
 const Cart = () => {
   const dispatch = useDispatch();

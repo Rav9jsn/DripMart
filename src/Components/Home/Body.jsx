@@ -9,7 +9,7 @@ import {
   fetchFavItems,
   updateFavouritesItem,
 } from "../../state/storage";
-import useAddtocart from "../../UseAddtocart";
+import useAddtocart from "../../useAddtocart";
 
 const Body = () => {
   const dispatch = useDispatch();
